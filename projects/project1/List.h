@@ -27,12 +27,13 @@ class List
 
 class mtfList: public List
 {
-    int searchAndMoveToFront();
+    int searchAndMoveToFront(int value);
+    void insertValueAtFront(int value);
 };
 
 class orderedList: public List
 {
-    int searchForValue();
+    int searchForValue(int value);
 };
 
 #endif

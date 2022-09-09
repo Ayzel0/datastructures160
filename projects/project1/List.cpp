@@ -85,12 +85,78 @@ void List::removeValue(int index)
     delete temp;
 }
 
-int mtfList::searchAndMoveToFront()
+void mtfList::insertValueAtFront(int value)
 {
-
+    Node* newNode = new Node(value);
+    newNode->next = head;
+    head = newNode;
+    length++;
 }
 
-int orderedList::searchForValue()
+int mtfList::searchAndMoveToFront(int value)
 {
+    // bool to keep track of whether value is found
+    bool found = false;
     
+    // integer to return
+    int returnVal = 0;
+
+    // loop through the linked list, searching for value
+    Node* temp1 = head;
+    Node* temp2 = nullptr;
+
+    while(temp1->next != nullptr)
+    {
+        // check if temp1 is equal to the value
+        if(temp1->data == value)
+        {
+            // set returnVal to the value at pointer
+            returnVal = temp1->data;
+
+            // set found to true
+            found = true;
+
+            // insert the value at front
+            insertValueAtFront(temp1->data);
+
+            // delete temp1 node, set temp2 next pointer to temp1 next
+            temp2->next = temp1->next;
+            delete temp1;
+
+            // return value
+            return returnVal;
+        }
+
+        // if temp1 not at this value, move to the next node
+        temp2 = temp1;
+        temp1 = temp1->next;
+    }
+
+    // if not found
+    if(found == false)
+    {
+        returnVal = -1;
+        return returnVal;
+    }
+}
+
+int orderedList::searchForValue(int value)
+{
+    Node* temp = head;
+    int index = 0;
+
+    while(temp->next != nullptr)
+    {
+        if(temp->data == value)
+        {
+            // temp is pointing to node with data, so return index
+            return index;
+        }
+        else
+        {
+            // shift temp by one, add one to index
+            temp = temp->next;
+            index++;
+        }
+    }
 }
