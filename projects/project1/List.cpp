@@ -42,6 +42,29 @@ void List::pushValue(int value)
     }
 }
 
+void List::pushValueAtFront(int value)
+{
+    length++;
+    Node* newNode = new Node(value);
+
+    // check if list is empty
+    // if list is empty, set head and tail to newNode
+    if(head == nullptr)
+    {
+        head = newNode;
+        tail = newNode;
+    }
+
+    // if it's not empty:
+    // set the tail node's next pointer to newNode
+    // set tail pointer to newNode
+    else
+    {
+        newNode->next = head;
+        head = newNode;
+    }
+}
+
 void List::removeValue(int index)
 {
     if(index > length-1)
@@ -94,27 +117,35 @@ void List::printList()
     Node* temp = head;
 
     // loop through all nodes and print out the numbers with a space
-    while(temp->next != nullptr)
+    while(temp != nullptr)
     {
         cout << temp->data << " ";
         temp = temp->next;
     }
+
+    cout << endl;
 }
 
-void MTFlist::readInFileAndQuery(string fileName)
+int MTFlist::readInFileAndQuery(string fileName)
 {
+    // traversal count counter
+    int traversalCount = 0;
+
     ifstream inputFileStream;
     inputFileStream.open(fileName);
+    
+    /*
     if(inputFileStream.is_open())
     {
         cout << "file is open" << endl;
     }
+    */
 
     // read in the number of values to be stored in the list - first number in file
     int numberOfInts;
     string numOfIntsString;
     inputFileStream >> numOfIntsString;
-    cout << "there are " << numOfIntsString << " to be read into the linked list" << endl;
+    // cout << "there are " << numOfIntsString << " to be read into the linked list" << endl;
     numberOfInts = stoi(numOfIntsString);
 
     // read in the next n numbers into the list
@@ -124,8 +155,8 @@ void MTFlist::readInFileAndQuery(string fileName)
     {
         inputFileStream >> nextValueString;
         nextValue = stoi(nextValueString);
-        cout << "read in " << nextValueString << " to the linked list" << endl;
-        pushValue(nextValue);
+        // cout << "read in " << nextValueString << " to the linked list" << endl;
+        pushValueAtFront(nextValue);
     }
 
     // get the number of queries
@@ -141,8 +172,13 @@ void MTFlist::readInFileAndQuery(string fileName)
     {
         inputFileStream >> nextQueryString;
         nextQuery = stoi(nextQueryString);
-        searchAndMoveToFront(nextQuery);
+        traversalCount += searchAndMoveToFront(nextQuery);
     }
+
+    // print out the length of the linked list
+    // cout << length << endl;
+
+    return traversalCount;
 }
 
 void MTFlist::insertValueAtFront(int value)
@@ -158,21 +194,26 @@ int MTFlist::searchAndMoveToFront(int value)
     // bool to keep track of whether value is found
     bool found = false;
     
-    // integer to return
-    int returnVal = 0;
+    // traversal count to return
+    int traversalCount = 0;
 
-    // loop through the linked list, searching for value
+    // create temp nodes
     Node* temp1 = head;
     Node* temp2 = nullptr;
 
+    // check if the head node is equal to the value being searched for
+    if(temp1->data == value)
+    {
+        return 1;
+    }
+
+    // loop through the linked list, searching for value
     while(temp1->next != nullptr)
     {
+        traversalCount++;
         // check if temp1 is equal to the value
         if(temp1->data == value)
         {
-            // set returnVal to the value at pointer
-            returnVal = temp1->data;
-
             // set found to true
             found = true;
 
@@ -181,10 +222,10 @@ int MTFlist::searchAndMoveToFront(int value)
 
             // delete temp1 node, set temp2 next pointer to temp1 next
             temp2->next = temp1->next;
+            length--;
             delete temp1;
 
-            // return value
-            return returnVal;
+            return traversalCount;
         }
 
         // if temp1 not at this value, move to the next node
@@ -195,18 +236,20 @@ int MTFlist::searchAndMoveToFront(int value)
     // if not found
     if(found == false)
     {
-        returnVal = -1;
-        return returnVal;
+        return traversalCount;
     }
 }
 
-void orderedList::readInFile(string fileName)
+int orderedList::readInFile(string fileName)
 {
+    int traversalCount = 0;
     ifstream inputFileStream;
     inputFileStream.open(fileName);
 
+    /*
     if(inputFileStream.is_open())
         cout << "file is open" << endl;
+    */
 
     // read in the number of inputs you have into a variable
     int numberOfInputs;
@@ -237,29 +280,32 @@ void orderedList::readInFile(string fileName)
     {
         inputFileStream >> nextQueryString;
         nextQuery = stoi(nextQueryString);
-        searchForValue(nextQuery);
+        traversalCount += searchForValue(nextQuery);
     }
+
+    return traversalCount;
 }
 
 int orderedList::searchForValue(int value)
 {
     Node* temp = head;
-    int index = 0;
+    int traversalCount = 0;
 
     while(temp->next != nullptr)
     {
+        traversalCount++;
         if(temp->data == value)
         {
             // temp is pointing to node with data, so return index
-            return index;
+            return traversalCount;
         }
         else
         {
             // shift temp by one, add one to index
             temp = temp->next;
-            index++;
+            traversalCount++;
         }
     }
 
-    return -1;
+    return traversalCount;
 }

@@ -24,6 +24,7 @@ class List
         Node* head;
         Node* tail;
         void pushValue(int value);
+        void pushValueAtFront(int value);
         void removeValue(int index);
         void printList();
         int length;
@@ -32,7 +33,7 @@ class List
 class MTFlist: public List
 {
     public:
-        void readInFileAndQuery(string fileName);
+        int readInFileAndQuery(string fileName);
         int searchAndMoveToFront(int value);
         void insertValueAtFront(int value);
 };
@@ -40,7 +41,7 @@ class MTFlist: public List
 class orderedList: public List
 {
     public:
-        void readInFile(string fileName);
+        int readInFile(string fileName);
         int searchForValue(int value);
 };
 
