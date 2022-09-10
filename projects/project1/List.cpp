@@ -55,6 +55,7 @@ void List::removeValue(int index)
     if(index == 0)
     {
         head = head->next;
+        length--;
         delete temp;
     }
 
@@ -70,6 +71,7 @@ void List::removeValue(int index)
         // set tail equal to the second to last element, then move temp by one and delete it
         tail = temp;
         temp = temp->next;
+        length--;
         delete temp;
     }
     
@@ -82,10 +84,68 @@ void List::removeValue(int index)
 
     // once the index is reached, point the previous value to the next value, and delete node
     temp2->next = temp->next;
+    length--;
     delete temp;
 }
 
-void mtfList::insertValueAtFront(int value)
+void List::printList()
+{
+    // temp pointer notde
+    Node* temp = head;
+
+    // loop through all nodes and print out the numbers with a space
+    while(temp->next != nullptr)
+    {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+}
+
+void MTFlist::readInFileAndQuery(string fileName)
+{
+    ifstream inputFileStream;
+    inputFileStream.open(fileName);
+    if(inputFileStream.is_open())
+    {
+        cout << "file is open" << endl;
+    }
+
+    // read in the number of values to be stored in the list - first number in file
+    int numberOfInts;
+    string numOfIntsString;
+    inputFileStream >> numOfIntsString;
+    cout << "there are " << numOfIntsString << " to be read into the linked list" << endl;
+    numberOfInts = stoi(numOfIntsString);
+
+    // read in the next n numbers into the list
+    int nextValue = 0;
+    string nextValueString;
+    for(int i = 0; i<numberOfInts; i++)
+    {
+        inputFileStream >> nextValueString;
+        nextValue = stoi(nextValueString);
+        cout << "read in " << nextValueString << " to the linked list" << endl;
+        pushValue(nextValue);
+    }
+
+    // get the number of queries
+    int numberOfQueries = 0;
+    string numberOfQueriesString;
+    inputFileStream >> numberOfQueriesString;
+    numberOfQueries = stoi(numberOfQueriesString);
+
+    // read in all the numbers to be queried
+    int nextQuery = 0;
+    string nextQueryString;
+    for(int i = 0; i<numberOfQueries; i++)
+    {
+        inputFileStream >> nextQueryString;
+        nextQuery = stoi(nextQueryString);
+        searchAndMoveToFront(nextQuery);
+    }
+}
+
+void MTFlist::insertValueAtFront(int value)
 {
     Node* newNode = new Node(value);
     newNode->next = head;
@@ -93,7 +153,7 @@ void mtfList::insertValueAtFront(int value)
     length++;
 }
 
-int mtfList::searchAndMoveToFront(int value)
+int MTFlist::searchAndMoveToFront(int value)
 {
     // bool to keep track of whether value is found
     bool found = false;
@@ -159,4 +219,6 @@ int orderedList::searchForValue(int value)
             index++;
         }
     }
+
+    return -1;
 }

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -20,15 +22,19 @@ class List
         List();
         Node* head;
         Node* tail;
+        void readInFile(string fileName);
         void pushValue(int value);
         void removeValue(int index);
+        void printList();
         int length;
 };
 
-class mtfList: public List
+class MTFlist: public List
 {
-    int searchAndMoveToFront(int value);
-    void insertValueAtFront(int value);
+    public:
+        void readInFileAndQuery(string fileName);
+        int searchAndMoveToFront(int value);
+        void insertValueAtFront(int value);
 };
 
 class orderedList: public List
