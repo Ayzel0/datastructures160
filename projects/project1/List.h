@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <chrono>
 
 using namespace std;
 
@@ -22,7 +23,6 @@ class List
         List();
         Node* head;
         Node* tail;
-        void readInFile(string fileName);
         void pushValue(int value);
         void removeValue(int index);
         void printList();
@@ -39,7 +39,9 @@ class MTFlist: public List
 
 class orderedList: public List
 {
-    int searchForValue(int value);
+    public:
+        void readInFile(string fileName);
+        int searchForValue(int value);
 };
 
 #endif

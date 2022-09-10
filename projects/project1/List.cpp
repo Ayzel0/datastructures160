@@ -200,6 +200,47 @@ int MTFlist::searchAndMoveToFront(int value)
     }
 }
 
+void orderedList::readInFile(string fileName)
+{
+    ifstream inputFileStream;
+    inputFileStream.open(fileName);
+
+    if(inputFileStream.is_open())
+        cout << "file is open" << endl;
+
+    // read in the number of inputs you have into a variable
+    int numberOfInputs;
+    string numberOfInputsString;
+    inputFileStream >> numberOfInputsString;
+    numberOfInputs = stoi(numberOfInputsString);
+
+    // read in the next n values into the linked list
+    int nextValue;
+    string nextValueString;
+    for(int i = 0; i < numberOfInputs; i++)
+    {
+        inputFileStream >> nextValueString;
+        nextValue = stoi(nextValueString);
+        pushValue(nextValue);
+    }
+
+    // read in the number of queries
+    int numberOfQueries;
+    string numberOfQueriesString;
+    inputFileStream >> numberOfQueriesString;
+    numberOfQueries = stoi(numberOfQueriesString);
+
+    // loop through the given number of queries
+    int nextQuery;
+    string nextQueryString;
+    for(int i = 0; i < numberOfQueries; i++)
+    {
+        inputFileStream >> nextQueryString;
+        nextQuery = stoi(nextQueryString);
+        searchForValue(nextQuery);
+    }
+}
+
 int orderedList::searchForValue(int value)
 {
     Node* temp = head;
