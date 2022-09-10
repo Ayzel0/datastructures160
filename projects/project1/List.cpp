@@ -238,6 +238,8 @@ int MTFlist::searchAndMoveToFront(int value)
     {
         return traversalCount;
     }
+
+    return -1;
 }
 
 int orderedList::readInFile(string fileName)

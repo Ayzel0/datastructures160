@@ -1,22 +1,29 @@
-# makefile for project 1
+CPP = g++
+CFLAGS = -pg -Wall -std=c++11
+SRCS = main.cpp List.cpp
+SRCS = ${wildcard *.cpp}
+OBJS = ${SRCS:.cpp=.o}
+INCLS = ${SRCS:.cpp=.h}
 
-DRIVER_NAME = main
-SUBMIT_NAME = submit
+p1: $(OBJS)
+	$(CPP) $(CFLAGS) $(OBJS) -o p1
 
-a.out: $(DRIVER_NAME).o List.o
-	g++ $(Driver_NAME).o List.o
+$(OBJS):
+	$(CPP) $(CFLAGS) -c $*.cpp
 
-$(DRIVER_NAME).o: $(DRIVER_NAME).cpp $(DRIVER_NAME).h List.h
-	g++ -c $(DRIVER_NAME).cpp
+depend: Makefile.dep
+	$(CPP) -MM $(SRCS) > Makefile.dep
 
-List.o: List.cpp List.h
-	g++ -c List.cpp
+Makefile.dep:
+	touch Makefile.dep
 
 .PHONY: submit clean
 
 submit:
-	rm -f $(SUBMIT_NAME).zip
-	zip $(SUBMIT_NAME).zip Makefile $(DRIVER_NAME).cpp $(DRIVER_NAME).h List.cpp List.h
+	rm -f submit.zip
+	zip submit.zip $(SRCS) $(INCLS) Makefile Makefile.dep
 
 clean:
-	rm -f *.o core a.out
+	rm -f *.o a.out core
+
+include Makefile.dep
