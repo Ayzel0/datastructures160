@@ -4,5 +4,6 @@ using namespace std;
 
 int main()
 {
-    cout << "hello world" << endl;
+    string helloString = "hello world";
+    cout << helloString[4]*5;
 }

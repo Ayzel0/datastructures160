@@ -1,2 +1,2 @@
-#include "HashTable.h"
-#include "HashTableEntry.h"
+#include "ChainingHashTable.h"
+#include "QuadProbingHashTable.h"
