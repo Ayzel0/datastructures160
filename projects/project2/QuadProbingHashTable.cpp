@@ -8,13 +8,13 @@ QuadProbingHashTable::QuadProbingHashTable()
 
 QuadProbingHashTable::~QuadProbingHashTable()
 {
-    delete hashTable;
+    delete[] hashTable;
 }
 
 // hash function implementation
 int QuadProbingHashTable::hashFunction(string value){
     long long int hash = 0;
-    for(int i = 0; i<value.length(); i++)
+    for(long unsigned int i = 0; i<value.length(); i++)
     {
         if(i < 10)
             hash += value.at(i)*pow(primeConstant, i);
@@ -27,7 +27,7 @@ int QuadProbingHashTable::hashFunction(string value){
 
 void QuadProbingHashTable::insertValue(string value, int index, int k)
 {
-    int insertIndex = (index+k^2)%quadProbingHashTableSize;
+    int insertIndex = (index+(k^2))%quadProbingHashTableSize;
     if(hashTable[insertIndex].compare("") == 0)
     {
         // if the array at index is empty, insert the string at the index
@@ -44,7 +44,7 @@ void QuadProbingHashTable::insertValue(string value, int index, int k)
 int QuadProbingHashTable::searchValue(string value, int index, int k)
 {
     // first check whether the index is empty
-    int searchIndex = (index + k^2)%quadProbingHashTableSize;
+    int searchIndex = (index + (k^2))%quadProbingHashTableSize;
     if(hashTable[searchIndex].compare("") == 0)
     {
         // no value at index, return -1

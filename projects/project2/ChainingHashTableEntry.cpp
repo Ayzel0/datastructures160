@@ -2,12 +2,12 @@
 
 ChainingHashTableEntry::ChainingHashTableEntry()
 {
-    next = nullptr;
-    value = "";
+    this->next = nullptr;
+    this->value = "";
 }
 
 ChainingHashTableEntry::ChainingHashTableEntry(string newValue)
 {
-    next = nullptr;
-    value = newValue;
+    this->next = nullptr;
+    this->value = newValue;
 }

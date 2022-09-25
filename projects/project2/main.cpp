@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
         string pushString = "";
         if(cleanWord(checkWord) != "")
         {
-            for(int i = 0; i<checkWord.length(); i++)
+            for(long unsigned int i = 0; i<checkWord.length(); i++)
             {
                 // check for lowercase letters
                 if(checkWord.at(i) >= 97 && checkWord.at(i) <= 122)
@@ -75,13 +75,13 @@ int main(int argc, char* argv[])
     }
 
     // create the quad probing hash table
-    QuadProbingHashTable qpHashTable;
+    QuadProbingHashTable hashTable1;
 
     // insert words into the quadratic probing hash table
     quadProbingStart = chrono::system_clock::now();
     for(int i = 0; i<count; i++)
     {
-        qpHashTable.insertValue(dictionary[i], qpHashTable.hashFunction(dictionary[i]), 0);
+        hashTable1.insertValue(dictionary[i], hashTable1.hashFunction(dictionary[i]), 0);
     }
     quadProbingEnd = chrono::system_clock::now();
     quadProbingElapsed = quadProbingEnd - quadProbingStart;
@@ -90,7 +90,7 @@ int main(int argc, char* argv[])
     int misspelledCountQuadProbing = 0;
     for(int i = 0; i<spellCheckCount; i++)
     {
-        if(qpHashTable.searchValue(spellCheckWords[i], qpHashTable.hashFunction(spellCheckWords[i]), 0) == -1)
+        if(hashTable1.searchValue(spellCheckWords[i], hashTable1.hashFunction(spellCheckWords[i]), 0) == -1)
         {
             //cout << "quadProbing found " << spellCheckWords[i] << " to be a misspelled word" << endl;
             misspelledCountQuadProbing++;
@@ -102,13 +102,13 @@ int main(int argc, char* argv[])
     cout << "Quadratic probing took " << quadProbingElapsed.count()*1000000000 << " nanoseconds" << endl;
 
     // create the chaining hash table
-    ChainingHashTable chainingHashTable;
+    ChainingHashTable hashTable2;
 
     // insert values into the chaining hash table
     chainingStart = chrono::system_clock::now();
     for(int i = 0; i<count; i++)
     {
-        chainingHashTable.insertValue(dictionary[i]);
+        hashTable2.insertValue(dictionary[i]);
     }
     chainingEnd = chrono::system_clock::now();
     chainingElapsed = chainingEnd-chainingStart;
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
     int misspelledCountChaining = 0;
     for(int i = 0; i<spellCheckCount; i++)
     {
-        if(chainingHashTable.searchValue(spellCheckWords[i]) == -1)
+        if(hashTable2.searchValue(spellCheckWords[i]) == -1)
         {
             //cout << "chaining found " << spellCheckWords[i] << " to be a misspelled word" << endl;
             misspelledCountChaining++;
@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
     cout << misspelledCountChaining << " misspelled words found with chaining" << endl;
     cout << "Chaining took " << chainingElapsed.count()*1000000000 << " nanoseconds" << endl;
     
-    if(chainingElapsed.count() > quadProbingElapsed.count())
+    if(chainingElapsed.count() < quadProbingElapsed.count())
     {
         cout << "chaining was more efficient" << endl;
     }
@@ -138,15 +138,15 @@ int main(int argc, char* argv[])
     }
 
     // deallocate memory
-    delete dictionary;
-    delete spellCheckWords;
+    delete[] dictionary;
+    delete[] spellCheckWords;
 }
 
 // remove punctuation and decapitalize word
 string cleanWord(string s)
 {
     string returnString; 
-    for(int i = 0; i<s.length(); i++)
+    for(long unsigned int i = 0; i<s.length(); i++)
     {
         // check for lowercase letters
         if(s.at(i) >= 97 && s.at(i) <= 122)

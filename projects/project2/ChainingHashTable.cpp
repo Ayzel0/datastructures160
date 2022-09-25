@@ -5,6 +5,10 @@ ChainingHashTable::ChainingHashTable()
 {
     // create a new table with the size of tableSize
     hashTable = new ChainingHashTableEntry*[chainingHashTableSize];
+    for(int i = 0; i<chainingHashTableSize; i++)
+    {
+        hashTable[i] = nullptr;
+    }
 }
 
 // destructor
@@ -35,13 +39,13 @@ ChainingHashTable::~ChainingHashTable()
     }
 
     // delete hash table
-    delete hashTable;
+    delete[] hashTable;
 }
 
 // hash function implementation
 int ChainingHashTable::hashFunction(string value){
     long long int hash = 0;
-    for(int i = 0; i<value.length(); i++)
+    for(long unsigned int i = 0; i<value.length(); i++)
     {
         if(i < 10)
             hash += value.at(i)*pow(chainingPrimeConstant, i);
