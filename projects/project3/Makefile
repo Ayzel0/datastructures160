@@ -1,6 +1,6 @@
 CPP = g++
 CFLAGS = -pg -Wall -std=c++11
-SRCS = main.cpp binarySearchTree.cpp BSTnode.cpp
+SRCS = main.cpp binarySearchTree.cpp BSTnode.cpp splayTree.cpp splayTreeNode.cpp
 SRCS = ${wildcard *.cpp}
 OBJS = ${SRCS:.cpp=.o}
 INCLS = ${SRCS:.cpp=.h}

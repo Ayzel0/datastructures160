@@ -41,6 +41,15 @@ int main(int argc, char* argv[])
 
     cout << "splay traversal count: " << mySplayTree.traversalCount << endl;
     cout << "splay chrono count: " << splayTimeElapsed.count()*1000000000 << endl;
+
+    if(splayTimeElapsed.count() < bstTimeElapsed.count())
+    {
+        cout << "splay tree was more efficient" << endl;
+    }
+    else
+    {
+        cout << "binary search tree was more efficient" << endl;
+    }
 }
 
 void readDataIntoBST(binarySearchTree& bst, string fileName)
