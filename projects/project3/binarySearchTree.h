@@ -21,4 +21,7 @@ class binarySearchTree
         void display(BSTnode*);
         void display();
         void destroyTree(BSTnode*);
+        BSTnode* splayNode(BSTnode*, int);
+        BSTnode* rightRotate(BSTnode*);
+        BSTnode* leftRotate(BSTnode*);
 };
