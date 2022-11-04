@@ -60,6 +60,7 @@ void ChainingHashTable::insertValue(string value)
 {
     // find the index
     int index = hashFunction(value);
+    
     // check whether index is free
     if(hashTable[index] == nullptr)
     {
