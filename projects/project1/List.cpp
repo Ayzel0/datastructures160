@@ -133,19 +133,11 @@ int MTFlist::readInFileAndQuery(string fileName)
 
     ifstream inputFileStream;
     inputFileStream.open(fileName);
-    
-    /*
-    if(inputFileStream.is_open())
-    {
-        cout << "file is open" << endl;
-    }
-    */
 
     // read in the number of values to be stored in the list - first number in file
     int numberOfInts;
     string numOfIntsString;
     inputFileStream >> numOfIntsString;
-    // cout << "there are " << numOfIntsString << " to be read into the linked list" << endl;
     numberOfInts = stoi(numOfIntsString);
 
     // read in the next n numbers into the list
@@ -155,7 +147,6 @@ int MTFlist::readInFileAndQuery(string fileName)
     {
         inputFileStream >> nextValueString;
         nextValue = stoi(nextValueString);
-        // cout << "read in " << nextValueString << " to the linked list" << endl;
         pushValueAtFront(nextValue);
     }
 
