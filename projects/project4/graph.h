@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -12,6 +13,12 @@ class vertex
         string name;
         vertex* next;
         int weight;
+        bool operator<(const vertex& v);
+        bool operator>(const vertex& v);
+        bool operator<=(const vertex& v);
+        bool operator>=(const vertex& v);
+        bool operator==(const vertex& v);
+        friend ostream &operator<<(ostream& output, const vertex& v);
 };
 
 // graph implementation
@@ -22,6 +29,8 @@ class graph
         int vertices;
         vector<vertex*> graphVector;
         void addEdge(string, string, int);
-        void shortestDistance(string, string);
+        vertex getClosestUnvisitedNeighbor(vertex*);
+        vertex getClosestUnvisitedNeighbor(string);
+        int shortestDistance(string, string);
         void printGraph();
 };

@@ -1,46 +1,39 @@
-#include "priorityQueue.h"
+#include "priorityQueueVertex.h"
 
 // default, sets size to zero
-template <class T>
-priorityQueue<T>::priorityQueue()
+priorityQueue::priorityQueue()
 {
-    T unused;
     size = 0;
 }
 
 // returns index of parent
-template <class T>
-int priorityQueue<T>::parentIndex(int i)
+int priorityQueue::parentIndex(int i)
 {
     return (i-1)/2;
 }
 
 // returns index of left child
-template <class T>
-int priorityQueue<T>::leftChildIndex(int i)
+int priorityQueue::leftChildIndex(int i)
 {
     return 2*i+1;
 }
 
 // returns index of right child
-template <class T>
-int priorityQueue<T>::rightChildIndex(int i)
+int priorityQueue::rightChildIndex(int i)
 {
     return 2*i+2;
 }
 
 // swaps two items in the priority queue
-template <class T>
-void priorityQueue<T>::swap(T* x, T* y)
+void priorityQueue::swap(vertex* x, vertex* y)
 {
-    T temp = *x;
+    vertex temp = *x;
     *x = *y;
     *y = temp;
 }
 
 // adds value to heap, satisfying min queue property
-template <class T>
-void priorityQueue<T>::enqueue(T data)
+void priorityQueue::enqueue(vertex data)
 {
     // first check to make sure that the heap size isn't larger than max size
     if(size >= maxHeapSize)
@@ -70,8 +63,7 @@ void priorityQueue<T>::enqueue(T data)
 }
 
 // shifts the item at index to the correct position
-template <class T>
-void priorityQueue<T>::minHeapify(int index)
+void priorityQueue::minHeapify(int index)
 {
     // check the children nodes
     int left = priorityQueue::leftChildIndex(index);
@@ -95,7 +87,7 @@ void priorityQueue<T>::minHeapify(int index)
     // check if smallestIndex is index of current node; if not swap
     if(smallestIndex != index)
     {
-        int temp = heap[index];
+        vertex temp = heap[index];
         heap[index] = heap[smallestIndex];
         heap[smallestIndex] = temp;
         minHeapify(smallestIndex);
@@ -103,21 +95,22 @@ void priorityQueue<T>::minHeapify(int index)
 }
 
 // return the smallest item
-template <class T>
-T priorityQueue<T>::peek()
+vertex priorityQueue::peek()
 {
     return heap[0];
 }
 
 // remove the smallest item and return it
-template <class T>
-T priorityQueue<T>::dequeue()
+vertex priorityQueue::dequeue()
 {
     // grab the smallest item
-    T minItem = heap[0];
+    vertex minItem = heap[0];
 
     // set the head of the heap to the last item in the heap
     heap[0] = heap[size-1];
+
+    // reduce size
+    size--;
 
     // maintain heap property
     minHeapify(0);
@@ -126,8 +119,7 @@ T priorityQueue<T>::dequeue()
 }
 
 // debug purposes, prints the queue
-template <class T>
-void priorityQueue<T>::printQueue()
+void priorityQueue::printQueue()
 {
     for(int i = 0; i<size; i++)
     {
