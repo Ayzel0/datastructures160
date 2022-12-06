@@ -71,6 +71,32 @@ std::ostream &operator<<(ostream& output, const vertex& v)
     return output;
 }
 
+// graphList implementation
+graphList::graphList()
+{
+    graphSize = 0;
+}
+
+void graphList::push_back(vertex* v)
+{
+    if(graphSize < maxGraphSize)
+    {
+        graph[graphSize] = v;
+        graphSize++;
+    }
+}
+
+int graphList::size()
+{
+    return graphSize;
+}
+
+vertex* graphList::at(int index)
+{
+    return graph[index];
+}
+
+// graph implementation
 graph::graph()
 {
     vertices = 0;
@@ -87,7 +113,7 @@ void graph::addEdge(string origin, string terminus, int weight)
     
     for(int i = 0; i<vertices; i++)
     {
-        if(graphVector.at(i)->name == origin)
+        if(graphList.at(i)->name == origin)
         {
             // debug
             // cout << "existing vertex found, attemping to add" << endl;
@@ -97,7 +123,7 @@ void graph::addEdge(string origin, string terminus, int weight)
             // create a new node with the name of terminus
             vertex* newVertex = new vertex(terminus, weight);
 
-            vertex* current = graphVector.at(i);
+            vertex* current = graphList.at(i);
             while(current->next != nullptr)
             {
                 current = current->next;
@@ -107,7 +133,7 @@ void graph::addEdge(string origin, string terminus, int weight)
             current->next = newVertex;
         }
 
-        if(graphVector.at(i)->name == terminus)
+        if(graphList.at(i)->name == terminus)
         {
             terminusFound = true;
         }
@@ -123,10 +149,10 @@ void graph::addEdge(string origin, string terminus, int weight)
         vertex* newVertexTerminus = new vertex(terminus, weight);
 
         // add the origin vertex to the vector
-        graphVector.push_back(newVertexOrigin);
+        graphList.push_back(newVertexOrigin);
 
         // set the origin vertex's next pointer to the new vertex
-        graphVector.at(graphVector.size()-1)->next = newVertexTerminus;
+        graphList.at(graphList.size()-1)->next = newVertexTerminus;
 
         // increase number of vertices by 1
         vertices++;
@@ -138,7 +164,7 @@ void graph::addEdge(string origin, string terminus, int weight)
         vertex* newVertex = new vertex(terminus, 0);
 
         // add the vertex to the vector
-        graphVector.push_back(newVertex);
+        graphList.push_back(newVertex);
 
         // increase vertices
         vertices++;
@@ -148,11 +174,11 @@ void graph::addEdge(string origin, string terminus, int weight)
 vertex graph::getClosestUnvisitedNeighbor(string vertexName)
 {
     vertex returnVertex;
-    for(int i = 0; i<graphVector.size(); i++)
+    for(int i = 0; i<graphList.size(); i++)
     {
-        if(graphVector.at(i)->name == vertexName)
+        if(graphList.at(i)->name == vertexName)
         {
-            returnVertex = getClosestUnvisitedNeighbor(graphVector.at(i));
+            returnVertex = getClosestUnvisitedNeighbor(graphList.at(i));
         }
     }
 
@@ -173,7 +199,7 @@ vertex graph::getClosestUnvisitedNeighbor(vertex* v)
     // find the vertex in the vector
     for(int i = 0; i<vertices; i++)
     {
-        if(v == graphVector.at(i))
+        if(v == graphList.at(i))
         {
             index = i;
             break;
@@ -188,7 +214,7 @@ vertex graph::getClosestUnvisitedNeighbor(vertex* v)
 
     // loop through the vertices of the vertex at index i
     // current pointer for traversing the linked list
-    vertex* current = graphVector.at(index);
+    vertex* current = graphList.at(index);
     while(current->next != nullptr)
     {
         current = current->next;
@@ -205,12 +231,12 @@ vertex graph::getClosestUnvisitedNeighbor(vertex* v)
 
 void graph::printGraph()
 {
-    for(int i = 0; i<graphVector.size(); i++)
+    for(int i = 0; i<graphList.size(); i++)
     {
         // print the origin
-        cout << "origin node: " << graphVector.at(i)->name << " is connected to the following:" << endl;
+        cout << "origin node: " << graphList.at(i)->name << " is connected to the following:" << endl;
         
-        vertex* current = graphVector.at(i);
+        vertex* current = graphList.at(i);
         while(current->next != nullptr)
         {
             current = current->next;

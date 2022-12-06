@@ -8,30 +8,68 @@ dijkstra::dijkstra()
 
 dijkstra::~dijkstra()
 {
-    deleteDijkstraVector();
+    dList.deleteDijkstraList();
     // cout << "done deleting dijkstra vector" << endl;
 }
 
 dijkstraEntry* dijkstra::findDEntry(vertex* vert)
 {
-    for(int i = 0; i<dVector.size(); i++)
+    for(int i = 0; i<dList.size(); i++)
     {
-        if(dVector.at(i)->v->name == vert->name)
+        if(dList.at(i)->v->name == vert->name)
         {
-            return dVector.at(i);
+            return dList.at(i);
         }
     }
     return nullptr;
 }
 
-void dijkstra::deleteDijkstraVector()
+// dijkstraList implementation
+dijkstraList::dijkstraList()
 {
-    for(int i = 0; i<dVector.size(); i++)
+    dijkstraListSize = 0;
+}
+
+int dijkstraList::size()
+{
+    return dijkstraListSize;
+}
+
+void dijkstraList::push_back(dijkstraEntry* e)
+{
+    if(dijkstraListSize < maxListSize)
     {
-        dijkstraEntry *d = dVector.at(i);
-        delete d;
+        list[dijkstraListSize] = e;
+        dijkstraListSize++;
     }
-    dVector.clear();
+}
+
+dijkstraEntry* dijkstraList::at(int index)
+{
+    return list[index];
+}
+
+void dijkstraList::deleteDijkstraList()
+{
+    for(int i = 0; i<dijkstraListSize; i++)
+    {
+        delete list[i];
+    }
+}
+
+// vertexList implementation
+vertexList::vertexList()
+{
+    vertexListSize = 0;
+}
+
+void vertexList::push_back(vertex* v)
+{
+    if(vertexListSize < maxListSize)
+    {
+        vList[vertexListSize] = v;
+        vertexListSize++;
+    }
 }
 
 bool isInVector(vector<vertex*> vec, vertex* v)
@@ -67,12 +105,12 @@ void printVector(vector<vertex*> v)
 void dijkstra::printDijkstra()
 {
     cout << "vertex name " << " : " << " previous vertex " << " : " << " shortest distance" << endl;
-    for(int i = 0; i<dVector.size(); i++)
+    for(int i = 0; i<dList.size(); i++)
     {
-        if(dVector.at(i)->previousVertex == nullptr)
-            cout << dVector.at(i)->v->name << " : " << "null" << " : " << dVector.at(i)->shortestDistance << endl; 
+        if(dList.at(i)->previousVertex == nullptr)
+            cout << dList.at(i)->v->name << " : " << "null" << " : " << dList.at(i)->shortestDistance << endl; 
         else
-            cout << dVector.at(i)->v->name << " : " << dVector.at(i)->previousVertex->name << " : " << dVector.at(i)->shortestDistance << endl; 
+            cout << dList.at(i)->v->name << " : " << dList.at(i)->previousVertex->name << " : " << dList.at(i)->shortestDistance << endl; 
     }
 }
 
@@ -101,21 +139,21 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     // do dijkstra's algorithm
     // find where we're starting
     int start = 0, end = 0;
-    for(int i = 0; i<g.graphVector.size(); i++)
+    for(int i = 0; i<g.graphList.size(); i++)
     {
-        if(g.graphVector.at(i)->name == v1)
+        if(g.graphList.at(i)->name == v1)
         {
             start = i;
         }
     }
 
     // start by making the path and cost arrays - should have three columns and row equivalent to entries
-    for(int i = 0; i<g.graphVector.size(); i++)
+    for(int i = 0; i<g.graphList.size(); i++)
     {
         dijkstraEntry *newEntry = new dijkstraEntry;
-        newEntry->v = g.graphVector.at(i);
+        newEntry->v = g.graphList.at(i);
         newEntry->previousVertex = nullptr;
-        dVector.push_back(newEntry);
+        dList.push_back(newEntry);
     }
 
     // make the visited and unvisited arrays
@@ -123,9 +161,9 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     vector<vertex*> unvisited;
 
     // fill the unvisited array
-    for(int i = 0; i<g.graphVector.size(); i++)
+    for(int i = 0; i<g.graphList.size(); i++)
     {
-        unvisited.push_back(g.graphVector.at(i));
+        unvisited.push_back(g.graphList.at(i));
     }
 
     // now, start traversing
@@ -136,13 +174,13 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     int vertexNum = start;
 
     // set the distance between the start and itself to 0
-    findDEntry(g.graphVector.at(vertexNum))->shortestDistance = 0;
+    findDEntry(g.graphList.at(vertexNum))->shortestDistance = 0;
 
     // loop while we've still got entries in the unvisited vector - there are still vertices we haven't visited
     while(unvisited.size() != 0)
     {
         // pointer for the vertex we are currently "at"
-        vertex* currentVertex = g.graphVector.at(vertexNum);
+        vertex* currentVertex = g.graphList.at(vertexNum);
 
         // dijkstra entry for the vertex we're currently at
         dijkstraEntry *d = findDEntry(currentVertex);
@@ -187,9 +225,9 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
         }
 
         // update vertexNum to be the correct index for the next vertex
-        for(int i = 0; i<g.graphVector.size(); i++)
+        for(int i = 0; i<g.graphList.size(); i++)
         {
-            if(g.graphVector.at(i)->name == tempEntry->to->name)
+            if(g.graphList.at(i)->name == tempEntry->to->name)
             {
                 vertexNum = i;
             }
@@ -200,11 +238,11 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     }
 
     // after the while loop is over, you now have a complete dijkstra vector, so look for the path you want
-    for(int i = 0; i<dVector.size(); i++)
+    for(int i = 0; i<dList.size(); i++)
     {
-        if(dVector.at(i)->v->name == v2)
+        if(dList.at(i)->v->name == v2)
         {
-            return dVector.at(i)->shortestDistance;
+            return dList.at(i)->shortestDistance;
         }
     }
 

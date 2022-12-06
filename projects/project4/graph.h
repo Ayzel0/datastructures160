@@ -21,13 +21,27 @@ class vertex
         friend ostream &operator<<(ostream& output, const vertex& v);
 };
 
+// graph list implementation
+class graphList
+{
+    private:
+        const static int maxGraphSize = 50;
+        int graphSize;
+        vertex* graph[maxGraphSize];
+
+    public:
+        graphList();
+        void push_back(vertex* v);
+        int size();
+};
+
 // graph implementation
 class graph
 {
     public:
         graph();
         int vertices;
-        vector<vertex*> graphVector;
+        graphList graphList;
         void addEdge(string, string, int);
         vertex getClosestUnvisitedNeighbor(vertex*);
         vertex getClosestUnvisitedNeighbor(string);
