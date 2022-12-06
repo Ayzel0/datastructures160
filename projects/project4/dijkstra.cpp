@@ -63,6 +63,14 @@ vertexList::vertexList()
     vertexListSize = 0;
 }
 
+vertexList::~vertexList()
+{
+    for(int i = 0; i<vertexListSize; i++)
+    {
+        delete vList[i];
+    }
+}
+
 void vertexList::push_back(vertex* v)
 {
     if(vertexListSize < maxListSize)
@@ -72,6 +80,17 @@ void vertexList::push_back(vertex* v)
     }
 }
 
+vertex* vertexList::at(int index)
+{
+    return vList[index];
+}
+
+int vertexList::size()
+{
+    return vertexListSize;
+}
+
+// helper functions
 bool isInVector(vector<vertex*> vec, vertex* v)
 {
     for(int i = 0; i<vec.size(); i++)
@@ -114,6 +133,7 @@ void dijkstra::printDijkstra()
     }
 }
 
+// debug
 void dijkstra::printPQueue()
 {
     pQueue.printQueue();

@@ -33,6 +33,7 @@ class graphList
         graphList();
         void push_back(vertex* v);
         int size();
+        vertex* at(int);
 };
 
 // graph implementation
