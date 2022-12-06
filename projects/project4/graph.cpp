@@ -1,13 +1,5 @@
 #include "graph.h"
 
-// struct to store things for dijkstra
-struct dijkstraEntry
-{
-    vertex* v;
-    int shortestDistance = 2147483647;
-    vertex* previousVertex;
-};
-
 // edge default constructor
 vertex::vertex()
 {
@@ -86,8 +78,9 @@ graph::graph()
 
 void graph::addEdge(string origin, string terminus, int weight)
 {
-    // check if we already have a node with the given origin
-    bool found = false;
+    // bool to check if we already have a node with the given origin
+    bool originFound = false;
+    bool terminusFound = false;
 
     //debug
     // cout << "attempting to add vertex with origin " << origin << ", terminus " << terminus << ", and weight " << weight << endl;
@@ -98,7 +91,7 @@ void graph::addEdge(string origin, string terminus, int weight)
         {
             // debug
             // cout << "existing vertex found, attemping to add" << endl;
-            found = true;
+            originFound = true;
 
             // we know that this already exists in the vector
             // create a new node with the name of terminus
@@ -113,9 +106,14 @@ void graph::addEdge(string origin, string terminus, int weight)
             // set the next vertex of whatever we're at to the new vertex
             current->next = newVertex;
         }
+
+        if(graphVector.at(i)->name == terminus)
+        {
+            terminusFound = true;
+        }
     }
 
-    if(found == false)
+    if(originFound == false)
     {
         // make two new vertices
         // vertex that holds the origin, has weight of 0
@@ -131,6 +129,18 @@ void graph::addEdge(string origin, string terminus, int weight)
         graphVector.at(graphVector.size()-1)->next = newVertexTerminus;
 
         // increase number of vertices by 1
+        vertices++;
+    }
+
+    if(terminusFound == false)
+    {
+        // create a new vertex for terminus
+        vertex* newVertex = new vertex(terminus, 0);
+
+        // add the vertex to the vector
+        graphVector.push_back(newVertex);
+
+        // increase vertices
         vertices++;
     }
 }
@@ -191,65 +201,6 @@ vertex graph::getClosestUnvisitedNeighbor(vertex* v)
     }
 
     return tempVertex;
-}
-
-int graph::shortestDistance(string v1, string v2)
-{
-    // check that v1 and v2 are valid vertices and assign to pointers
-    vertex* vertex1;
-    vertex* vertex2;
-    for(int i = 0; i<vertices; i++)
-    {
-        if(graphVector.at(i)->name == v1)
-        {
-            vertex1 = graphVector.at(i);
-        }
-        
-        if(graphVector.at(i)->name == v2)
-        {
-            vertex2 = graphVector.at(i);
-        }
-    }
-
-    // create the list of visited and unvisited vertices
-    vector<vertex*> visitedVector;
-    vector<vertex*> unvisitedVector;
-
-    // fill the unvisited list
-    for(int i = 0; i<graphVector.size(); i++)
-    {
-        unvisitedVector.push_back(graphVector.at(i));
-    }
-
-    // dijkstra vector - stores vertex, its shortest distance, and the previous vertex
-    vector<dijkstraEntry*> dijkstraVector;
-
-    // construct the dijkstra vector - start at vector1
-    dijkstraEntry *sourceVertex = new dijkstraEntry;
-    sourceVertex->shortestDistance = 0;
-    sourceVertex->v = vertex1;
-    sourceVertex->previousVertex = nullptr;
-
-    dijkstraVector.push_back(sourceVertex);
-
-    // loop through every other vertex and add it to the dijkstra vector with infinite distance
-    for(int i = 0; i<graphVector.size(); i++)
-    {
-        if(graphVector.at(i) != vertex1)
-        {
-            dijkstraEntry *entry = new dijkstraEntry;
-            entry->shortestDistance = 2147483647;
-            entry->previousVertex = nullptr;
-            entry->v = graphVector.at(i);
-            dijkstraVector.push_back(entry);
-        }
-    }
-
-    // start at dijkstra entry at position 0, and loop through and do dijkstra's algo
-    for(int i = 0; i<dijkstraVector.size(); i++)
-    {
-        
-    }
 }
 
 void graph::printGraph()

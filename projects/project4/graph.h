@@ -31,6 +31,5 @@ class graph
         void addEdge(string, string, int);
         vertex getClosestUnvisitedNeighbor(vertex*);
         vertex getClosestUnvisitedNeighbor(string);
-        int shortestDistance(string, string);
         void printGraph();
 };
