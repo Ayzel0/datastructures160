@@ -42,7 +42,7 @@ class graph
     public:
         graph();
         int vertices;
-        graphList graphList;
+        graphList gList;
         void addEdge(string, string, int);
         vertex getClosestUnvisitedNeighbor(vertex*);
         vertex getClosestUnvisitedNeighbor(string);

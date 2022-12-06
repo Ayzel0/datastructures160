@@ -9,7 +9,6 @@ dijkstra::dijkstra()
 dijkstra::~dijkstra()
 {
     dList.deleteDijkstraList();
-    // cout << "done deleting dijkstra vector" << endl;
 }
 
 dijkstraEntry* dijkstra::findDEntry(vertex* vert)
@@ -159,19 +158,19 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     // do dijkstra's algorithm
     // find where we're starting
     int start = 0, end = 0;
-    for(int i = 0; i<g.graphList.size(); i++)
+    for(int i = 0; i<g.gList.size(); i++)
     {
-        if(g.graphList.at(i)->name == v1)
+        if(g.gList.at(i)->name == v1)
         {
             start = i;
         }
     }
 
     // start by making the path and cost arrays - should have three columns and row equivalent to entries
-    for(int i = 0; i<g.graphList.size(); i++)
+    for(int i = 0; i<g.gList.size(); i++)
     {
         dijkstraEntry *newEntry = new dijkstraEntry;
-        newEntry->v = g.graphList.at(i);
+        newEntry->v = g.gList.at(i);
         newEntry->previousVertex = nullptr;
         dList.push_back(newEntry);
     }
@@ -181,9 +180,9 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     vector<vertex*> unvisited;
 
     // fill the unvisited array
-    for(int i = 0; i<g.graphList.size(); i++)
+    for(int i = 0; i<g.gList.size(); i++)
     {
-        unvisited.push_back(g.graphList.at(i));
+        unvisited.push_back(g.gList.at(i));
     }
 
     // now, start traversing
@@ -194,13 +193,13 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     int vertexNum = start;
 
     // set the distance between the start and itself to 0
-    findDEntry(g.graphList.at(vertexNum))->shortestDistance = 0;
+    findDEntry(g.gList.at(vertexNum))->shortestDistance = 0;
 
     // loop while we've still got entries in the unvisited vector - there are still vertices we haven't visited
     while(unvisited.size() != 0)
     {
         // pointer for the vertex we are currently "at"
-        vertex* currentVertex = g.graphList.at(vertexNum);
+        vertex* currentVertex = g.gList.at(vertexNum);
 
         // dijkstra entry for the vertex we're currently at
         dijkstraEntry *d = findDEntry(currentVertex);
@@ -245,9 +244,9 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
         }
 
         // update vertexNum to be the correct index for the next vertex
-        for(int i = 0; i<g.graphList.size(); i++)
+        for(int i = 0; i<g.gList.size(); i++)
         {
-            if(g.graphList.at(i)->name == tempEntry->to->name)
+            if(g.gList.at(i)->name == tempEntry->to->name)
             {
                 vertexNum = i;
             }

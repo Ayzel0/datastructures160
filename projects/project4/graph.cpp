@@ -113,7 +113,7 @@ void graph::addEdge(string origin, string terminus, int weight)
     
     for(int i = 0; i<vertices; i++)
     {
-        if(graphList.at(i)->name == origin)
+        if(gList.at(i)->name == origin)
         {
             // debug
             // cout << "existing vertex found, attemping to add" << endl;
@@ -123,7 +123,7 @@ void graph::addEdge(string origin, string terminus, int weight)
             // create a new node with the name of terminus
             vertex* newVertex = new vertex(terminus, weight);
 
-            vertex* current = graphList.at(i);
+            vertex* current = gList.at(i);
             while(current->next != nullptr)
             {
                 current = current->next;
@@ -133,7 +133,7 @@ void graph::addEdge(string origin, string terminus, int weight)
             current->next = newVertex;
         }
 
-        if(graphList.at(i)->name == terminus)
+        if(gList.at(i)->name == terminus)
         {
             terminusFound = true;
         }
@@ -149,10 +149,10 @@ void graph::addEdge(string origin, string terminus, int weight)
         vertex* newVertexTerminus = new vertex(terminus, weight);
 
         // add the origin vertex to the vector
-        graphList.push_back(newVertexOrigin);
+        gList.push_back(newVertexOrigin);
 
         // set the origin vertex's next pointer to the new vertex
-        graphList.at(graphList.size()-1)->next = newVertexTerminus;
+        gList.at(gList.size()-1)->next = newVertexTerminus;
 
         // increase number of vertices by 1
         vertices++;
@@ -164,7 +164,7 @@ void graph::addEdge(string origin, string terminus, int weight)
         vertex* newVertex = new vertex(terminus, 0);
 
         // add the vertex to the vector
-        graphList.push_back(newVertex);
+        gList.push_back(newVertex);
 
         // increase vertices
         vertices++;
@@ -174,11 +174,11 @@ void graph::addEdge(string origin, string terminus, int weight)
 vertex graph::getClosestUnvisitedNeighbor(string vertexName)
 {
     vertex returnVertex;
-    for(int i = 0; i<graphList.size(); i++)
+    for(int i = 0; i<gList.size(); i++)
     {
-        if(graphList.at(i)->name == vertexName)
+        if(gList.at(i)->name == vertexName)
         {
-            returnVertex = getClosestUnvisitedNeighbor(graphList.at(i));
+            returnVertex = getClosestUnvisitedNeighbor(gList.at(i));
         }
     }
 
@@ -199,7 +199,7 @@ vertex graph::getClosestUnvisitedNeighbor(vertex* v)
     // find the vertex in the vector
     for(int i = 0; i<vertices; i++)
     {
-        if(v == graphList.at(i))
+        if(v == gList.at(i))
         {
             index = i;
             break;
@@ -214,7 +214,7 @@ vertex graph::getClosestUnvisitedNeighbor(vertex* v)
 
     // loop through the vertices of the vertex at index i
     // current pointer for traversing the linked list
-    vertex* current = graphList.at(index);
+    vertex* current = gList.at(index);
     while(current->next != nullptr)
     {
         current = current->next;
@@ -231,12 +231,12 @@ vertex graph::getClosestUnvisitedNeighbor(vertex* v)
 
 void graph::printGraph()
 {
-    for(int i = 0; i<graphList.size(); i++)
+    for(int i = 0; i<gList.size(); i++)
     {
         // print the origin
-        cout << "origin node: " << graphList.at(i)->name << " is connected to the following:" << endl;
+        cout << "origin node: " << gList.at(i)->name << " is connected to the following:" << endl;
         
-        vertex* current = graphList.at(i);
+        vertex* current = gList.at(i);
         while(current->next != nullptr)
         {
             current = current->next;
