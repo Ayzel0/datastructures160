@@ -11,14 +11,9 @@ int main(int argc, char* argv[])
     string fileName = argv[1];
 
     readIntoGraph(myGraph, destinations, fileName);
-    cout << "my graph looks like: " << endl;
-    myGraph.printGraph();
-    
     dijkstra d;
-
-    cout << "we want to find the shortest path between " << destinations.at(0) << " and " << destinations.at(1) << endl;
     int dist = d.findShortestDistance(destinations.at(0), destinations.at(1), myGraph);
-    cout << dist << endl;
+    cout << "the distance between the vertices we want to find is " << dist << endl;
 }
 
 void readIntoGraph(graph &graph, vector<string> &destinations, string fileName)

@@ -17,5 +17,9 @@ class dijkstra
 
     public:
         dijkstra();
+        ~dijkstra();
+        void deleteDijkstraVector();
+        void printDijkstra();
+        void printPQueue();
         int findShortestDistance(string, string, graph);
 };

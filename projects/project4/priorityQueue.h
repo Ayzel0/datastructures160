@@ -1,26 +1,25 @@
 #include <iostream>
-#include "pQueueEntry.h"
 
 using namespace std;
 
 // implementing priority queue with a heap structure to preserve time complexity
+template <class T>
 class priorityQueue
 {
     private:
         const static int maxHeapSize = 50;
-        pQueueEntry* heap[maxHeapSize];
+        T heap[maxHeapSize];
         int size;
 
     public:
         priorityQueue();
-        ~priorityQueue();
         static int parentIndex(int);
         static int leftChildIndex(int);
         static int rightChildIndex(int);
-        static void swap(pQueueEntry**, pQueueEntry**);
-        void enqueue(pQueueEntry*);
+        static void swap(T*, T*);
+        void enqueue(T);
         void minHeapify(int);
-        pQueueEntry* peek();
-        pQueueEntry* dequeue();
+        T peek();
+        T dequeue();
         void printQueue();
 };

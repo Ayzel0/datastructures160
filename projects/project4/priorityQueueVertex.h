@@ -1,5 +1,5 @@
 #include <iostream>
-#include "pQueueEntry.h"
+#include "graph.h"
 
 using namespace std;
 
@@ -8,19 +8,18 @@ class priorityQueue
 {
     private:
         const static int maxHeapSize = 50;
-        pQueueEntry* heap[maxHeapSize];
+        vertex heap[maxHeapSize];
         int size;
 
     public:
         priorityQueue();
-        ~priorityQueue();
         static int parentIndex(int);
         static int leftChildIndex(int);
         static int rightChildIndex(int);
-        static void swap(pQueueEntry**, pQueueEntry**);
-        void enqueue(pQueueEntry*);
+        static void swap(vertex*, vertex*);
+        void enqueue(vertex);
         void minHeapify(int);
-        pQueueEntry* peek();
-        pQueueEntry* dequeue();
+        vertex peek();
+        vertex dequeue();
         void printQueue();
 };
