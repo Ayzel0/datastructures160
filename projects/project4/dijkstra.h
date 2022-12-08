@@ -27,15 +27,17 @@ class vertexList
 {
     private:
         const static int maxListSize = 50;
-        vertex* vList[maxListSize];
+        string vList[maxListSize];
         int vertexListSize;
 
     public:
         void push_back(vertex*);
+        void push_back(string);
+        void remove(int);
         int size();
-        vertex* at(int);
+        string at(int);
         vertexList();
-        ~vertexList();
+        void printVertexList();
 };
 
 class dijkstra

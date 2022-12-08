@@ -3,7 +3,6 @@
 dijkstra::dijkstra()
 {
     priorityQueue pQueue;
-    vector<dijkstraEntry*> dVector;
 }
 
 dijkstra::~dijkstra()
@@ -62,15 +61,16 @@ vertexList::vertexList()
     vertexListSize = 0;
 }
 
-vertexList::~vertexList()
+void vertexList::push_back(vertex* v)
 {
-    for(int i = 0; i<vertexListSize; i++)
+    if(vertexListSize < maxListSize)
     {
-        delete vList[i];
+        vList[vertexListSize] = v->name;
+        vertexListSize++;
     }
 }
 
-void vertexList::push_back(vertex* v)
+void vertexList::push_back(string v)
 {
     if(vertexListSize < maxListSize)
     {
@@ -79,7 +79,7 @@ void vertexList::push_back(vertex* v)
     }
 }
 
-vertex* vertexList::at(int index)
+string vertexList::at(int index)
 {
     return vList[index];
 }
@@ -89,12 +89,29 @@ int vertexList::size()
     return vertexListSize;
 }
 
-// helper functions
-bool isInVector(vector<vertex*> vec, vertex* v)
+void vertexList::remove(int index)
 {
-    for(int i = 0; i<vec.size(); i++)
+    for(int i = index; i<vertexListSize-1; i++)
     {
-        if(vec.at(i)->name == v->name)
+        vList[i] = vList[i+1];
+    }
+    vertexListSize--;
+}
+
+void vertexList::printVertexList()
+{
+    for(int i = 0; i<vertexListSize; i++)
+    {
+        cout << vList[i] << endl;
+    }
+}
+
+// helper functions
+bool isInList(vertexList list, vertex* v)
+{
+    for(int i = 0; i<list.size(); i++)
+    {
+        if(list.at(i) == v->name)
             return true;
     }
 
@@ -108,15 +125,6 @@ void addToPriorityQueue(priorityQueue &p, vertex* fromVertex, vertex* toVertex, 
     newEntry->to = toVertex;
     newEntry->weight = weight;
     p.enqueue(newEntry);
-}
-
-// debug
-void printVector(vector<vertex*> v)
-{
-    for(int i = 0; i<v.size(); i++)
-    {
-        cout << v.at(i)->name << endl;
-    }
 }
 
 // debug
@@ -138,26 +146,27 @@ void dijkstra::printPQueue()
     pQueue.printQueue();
 }
 
-pQueueEntry* dequeueUntilUnvisited(priorityQueue &p, vector<vertex*> unvisited)
+pQueueEntry* dequeueUntilUnvisited(priorityQueue &p, vertexList unvisited)
 {
     bool visited = true;
     while(visited)
     {
         pQueueEntry *entry = p.dequeue();
-        if(isInVector(unvisited, entry->to))
+        if(isInList(unvisited, entry->to))
         {
             visited = false;
             return entry;
         }
         delete entry;
     }
+    return nullptr;
 }
 
 int dijkstra::findShortestDistance(string v1, string v2, graph g)
 {
     // do dijkstra's algorithm
     // find where we're starting
-    int start = 0, end = 0;
+    int start = 0;
     for(int i = 0; i<g.gList.size(); i++)
     {
         if(g.gList.at(i)->name == v1)
@@ -176,8 +185,8 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     }
 
     // make the visited and unvisited arrays
-    vector<vertex*> visited;
-    vector<vertex*> unvisited;
+    vertexList visited;
+    vertexList unvisited;
 
     // fill the unvisited array
     for(int i = 0; i<g.gList.size(); i++)
@@ -196,6 +205,7 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
     findDEntry(g.gList.at(vertexNum))->shortestDistance = 0;
 
     // loop while we've still got entries in the unvisited vector - there are still vertices we haven't visited
+    int loopNumber = 0;
     while(unvisited.size() != 0)
     {
         // pointer for the vertex we are currently "at"
@@ -211,12 +221,13 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
             current = current->next;
 
             // check whether current has been visited before
-            if(!isInVector(visited, current))
+            if(!isInList(visited, current))
             {
                 // create a priority queue entry
                 addToPriorityQueue(pQueue, currentVertex, current, current->weight+d->shortestDistance);
             }
         }
+
 
         // dequeue until we find something we haven't visited
         pQueueEntry* tempEntry = dequeueUntilUnvisited(pQueue, unvisited);
@@ -230,16 +241,19 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
         
         // remove the vertex we're currently looking at from the unvisited vector and add it to visited
         // find the index of the current vertex in the unvisited vector
+
         for(int i = 0; i<unvisited.size(); i++)
         {
             // check whether the name of unvisited at index i is equal to the name of currentVertex
-            if(unvisited.at(i)->name == currentVertex->name)
+            if(unvisited.at(i) == currentVertex->name)
             {
                 // add the vertex to visited
                 visited.push_back(unvisited.at(i));
 
                 // remove the vertex from unvisited
-                unvisited.erase(unvisited.begin()+i);
+                unvisited.remove(i);
+
+                break;
             }
         }
 
@@ -254,6 +268,7 @@ int dijkstra::findShortestDistance(string v1, string v2, graph g)
 
         // delete tempEntry
         delete tempEntry;
+        loopNumber++;
     }
 
     // after the while loop is over, you now have a complete dijkstra vector, so look for the path you want
